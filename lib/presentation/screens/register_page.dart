@@ -73,7 +73,6 @@ class RegisterPage extends ConsumerWidget {
 
   void _signUp(WidgetRef ref) {
     if (passwordController.text != confirmPasswordController.text) {
-      print("Las contraseñas son diferentes");
       return;
     }
     ref
