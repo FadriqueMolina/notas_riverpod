@@ -23,7 +23,11 @@ class MainApp extends StatelessWidget {
         builder: (context, ref, child) {
           final userAsync = ref.watch(currentUserProvider);
           return userAsync.when(
-            data: (user) => user == null ? LoginPage() : HomePage(),
+            data:
+                (user) =>
+                    user == null
+                        ? LoginPage()
+                        : HomePage(email: user.email!.split("@").first),
             error: (error, stackTrace) => LoginPage(),
             loading: () => const CircularProgressIndicator(),
           );

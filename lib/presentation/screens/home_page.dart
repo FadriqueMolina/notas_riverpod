@@ -4,12 +4,16 @@ import 'package:notas_riverpod/business/providers/authentication/auth_provider.d
 import 'package:notas_riverpod/presentation/screens/login_page.dart';
 
 class HomePage extends ConsumerWidget {
-  const HomePage({super.key});
+  final String? email;
+  const HomePage({super.key, this.email});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: Text("Bienvenido a homepage"), centerTitle: true),
+      appBar: AppBar(
+        title: Text("Bienvenido a homepage $email"),
+        centerTitle: true,
+      ),
       body: Center(
         child: ElevatedButton(
           onPressed: () {
