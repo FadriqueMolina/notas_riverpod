@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:notas_riverpod/business/providers/authentication/auth_provider.dart';
 import 'package:notas_riverpod/presentation/screens/register_page.dart';
 import 'package:notas_riverpod/presentation/widgets/custom_button.dart';
 import 'package:notas_riverpod/presentation/widgets/custom_textfield.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends ConsumerWidget {
   final userController = TextEditingController();
   final passwordController = TextEditingController();
   LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
     return Scaffold(
       body: Center(
         child: Padding(
@@ -53,11 +56,20 @@ class LoginPage extends StatelessWidget {
               ),
               //Boton iniciar sesion
               SizedBox(height: 10),
-              CustomButton(text: "Iniciar sesion", ontap: () {}),
+              CustomButton(
+                text: "Iniciar sesion",
+                ontap: authState.isLoading ? null : () => _login(ref),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _login(WidgetRef ref) {
+    ref
+        .read(authProvider.notifier)
+        .login(userController.text, passwordController.text);
   }
 }
