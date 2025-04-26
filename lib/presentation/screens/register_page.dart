@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:notas_riverpod/business/providers/authentication/auth_provider.dart';
 import 'package:notas_riverpod/presentation/widgets/custom_button.dart';
 import 'package:notas_riverpod/presentation/widgets/custom_textfield.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends ConsumerWidget {
   final userController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   RegisterPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
     return Scaffold(
       body: Center(
         child: Padding(
@@ -57,11 +60,24 @@ class RegisterPage extends StatelessWidget {
               ),
               //Boton iniciar sesion
               SizedBox(height: 10),
-              CustomButton(text: "Iniciar sesion", ontap: () {}),
+              CustomButton(
+                text: "Crear cuenta",
+                ontap: authState.isLoading ? null : () => _signUp(ref),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _signUp(WidgetRef ref) {
+    if (passwordController.text != confirmPasswordController.text) {
+      print("Las contraseñas son diferentes");
+      return;
+    }
+    ref
+        .read(authProvider.notifier)
+        .signUp(userController.text, passwordController.text);
   }
 }
